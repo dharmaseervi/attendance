@@ -1,4 +1,5 @@
 "use client"
+
 import { AttendanceTable } from "@/components/data-table"
 import { SectionCards } from "@/components/section-cards"
 import { listenToAttendance } from "@/lib/attendanceService"
@@ -12,7 +13,6 @@ export default function Dashboard() {
     return unsubscribe;
   }, []);
 
-  console.log("attendanceData in dashboard:", attendanceData);
 
   return (
     <div className="flex flex-1 flex-col">

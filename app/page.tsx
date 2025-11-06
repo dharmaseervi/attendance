@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { useUser } from "@clerk/nextjs";
 import Dashboard from "./dashboard/page";
 import { redirect } from "next/navigation";

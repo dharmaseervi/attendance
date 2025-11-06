@@ -1,3 +1,4 @@
+"use client"
 import { db } from "./firebase"
 import { ref, get, set, push, update, remove, onValue } from "firebase/database"
 

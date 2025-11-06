@@ -1,22 +1,20 @@
-"use client"
+"use client";
 
 import { useUser } from "@clerk/nextjs";
-import Dashboard from "./dashboard/page";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { isSignedIn, user, isLoaded } = useUser()
-  if (!isLoaded) {
-    return <div>Loading...</div>
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+
+  if (!isLoaded) return <div>Loading...</div>;
+
+  if (!isSignedIn) {
+    router.push("/sign-in"); // ✅ Instead of redirect()
+    return null;
   }
 
-  // Use `isSignedIn` to protect the content
-  if (!isSignedIn) {
-    return redirect('/sign-in');
-  }
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <Dashboard />
-    </div>
-  );
+  // redirect to dashboard after login
+  router.push("/dashboard");
+  return null;
 }

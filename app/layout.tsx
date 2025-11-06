@@ -1,4 +1,4 @@
-"use client"
+
 import { type Metadata } from 'next'
 import {
   ClerkProvider,
@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-// export const metadata: Metadata = {
-//   title: "Attendance Management System",
-//   description: "Manage attendance efficiently with our intuitive system.",
-// };
+export const metadata: Metadata = {
+  title: "Attendance Management System",
+  description: "Manage attendance efficiently with our intuitive system.",
+};
 
 export default function RootLayout({
   children,
@@ -33,20 +33,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <SidebarProvider
-            style={
-              {
-                "--sidebar-width": "calc(var(--spacing) * 72)",
-                "--header-height": "calc(var(--spacing) * 12)",
-              } as React.CSSProperties
-            }
-          >
-            <AppSidebar variant="inset" />
-            <SidebarInset>
-              <SiteHeader />
               {children}
-            </SidebarInset>
-          </SidebarProvider>
         </body>
       </html >
     </ClerkProvider >

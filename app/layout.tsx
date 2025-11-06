@@ -1,3 +1,4 @@
+"use client"
 import { type Metadata } from 'next'
 import {
   ClerkProvider,
@@ -18,10 +19,10 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-export const metadata: Metadata = {
-  title: "Attendance Management System",
-  description: "Manage attendance efficiently with our intuitive system.",
-};
+// export const metadata: Metadata = {
+//   title: "Attendance Management System",
+//   description: "Manage attendance efficiently with our intuitive system.",
+// };
 
 export default function RootLayout({
   children,

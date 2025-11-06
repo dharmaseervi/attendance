@@ -11,6 +11,7 @@ import {
   IconHelp,
   IconSearch,
   IconInnerShadowTop,
+  IconTableAlias,
 } from "@tabler/icons-react"
 import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
@@ -29,16 +30,12 @@ import { useUser, UserButton } from "@clerk/nextjs"
 
 const data = {
   navMain: [
-    { title: "Dashboard", url: "#", icon: IconDashboard },
+    { title: "Dashboard", url: "/dashboard", icon: IconDashboard },
+    { title: "Timetable", url: "#", icon: IconTableAlias },
     { title: "Students", url: "#", icon: IconListDetails },
     { title: "Courses", url: "#", icon: IconChartBar },
     { title: "Analytics", url: "#", icon: IconFolder },
     { title: "Reports", url: "#", icon: IconUsers },
-  ],
-  navSecondary: [
-    { title: "Settings", url: "#", icon: IconSettings },
-    { title: "Get Help", url: "#", icon: IconHelp },
-    { title: "Search", url: "#", icon: IconSearch },
   ],
 }
 
@@ -67,13 +64,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
 
       <SidebarFooter>
         <NavUser user={user} />
-        {/* You can also keep Clerk’s default user menu if you like */}
-        {/* <UserButton afterSignOutUrl="/" /> */}
       </SidebarFooter>
     </Sidebar>
   )

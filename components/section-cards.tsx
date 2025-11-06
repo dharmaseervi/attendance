@@ -18,23 +18,40 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useEffect, useState } from "react"
+import { onValue, ref } from "firebase/database"
+import { db } from "@/lib/firebase"
 
-export function SectionCards({
-  stats = {
-    totalStudents: 1200,
-    presentToday: 1100,
-    absentToday: 100,
-    attendanceRate: 91.7,
-  },
-}: {
-  stats?: {
-    totalStudents: number
-    presentToday: number
-    absentToday: number
-    attendanceRate: number
-  }
-}) {
-  const { totalStudents, presentToday, absentToday, attendanceRate } = stats
+export function SectionCards() {
+
+  const [stats, setStats] = useState({
+    total: 0,
+    present: 0,
+    absent: 0,
+    attendanceRate: 0,
+  })
+
+  useEffect(() => {
+    const attendanceRef = ref(db, "attendance")
+    onValue(attendanceRef, (snapshot) => {
+      const data = snapshot.val() || {}
+      const allStudents = Object.values(data).flatMap((day: any) =>
+        Object.entries(day).filter(([key]) => key !== "id")
+      )
+
+      const total = allStudents.length
+      const present = allStudents.filter(([_, s]: any) => s.status === "Present").length
+      const absent = total - present
+      const rate = total ? ((present / total) * 100).toFixed(1) : 0
+
+      setStats({
+        total,
+        present,
+        absent,
+        attendanceRate: Number(rate),
+      })
+    })
+  }, [])
 
   return (
     <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -43,7 +60,7 @@ export function SectionCards({
         <CardHeader>
           <CardDescription>Total Students</CardDescription>
           <CardTitle className="text-2xl font-semibold @[250px]/card:text-3xl">
-            {totalStudents}
+            {stats.total}
           </CardTitle>
           <CardAction>
             <Badge variant="outline" className="gap-1">
@@ -67,12 +84,12 @@ export function SectionCards({
         <CardHeader>
           <CardDescription>Present Today</CardDescription>
           <CardTitle className="text-2xl font-semibold @[250px]/card:text-3xl">
-            {presentToday}
+            {stats.present}
           </CardTitle>
           <CardAction>
             <Badge variant="outline" className="gap-1 text-green-600">
               <IconCheck className="size-4" />
-              {((presentToday / totalStudents) * 100).toFixed(1)}%
+              {((stats.present / stats.total) * 100).toFixed(1)}%
             </Badge>
           </CardAction>
         </CardHeader>
@@ -89,12 +106,12 @@ export function SectionCards({
         <CardHeader>
           <CardDescription>Absent Today</CardDescription>
           <CardTitle className="text-2xl font-semibold @[250px]/card:text-3xl">
-            {absentToday}
+            {stats.absent}
           </CardTitle>
           <CardAction>
             <Badge variant="outline" className="gap-1 text-red-600">
               <IconX className="size-4" />
-              {((absentToday / totalStudents) * 100).toFixed(1)}%
+              {((stats.absent / stats.total) * 100).toFixed(1)}%
             </Badge>
           </CardAction>
         </CardHeader>
@@ -113,25 +130,24 @@ export function SectionCards({
         <CardHeader>
           <CardDescription>Attendance Rate</CardDescription>
           <CardTitle className="text-2xl font-semibold @[250px]/card:text-3xl">
-            {attendanceRate.toFixed(1)}%
+            {stats.attendanceRate.toFixed(1)}%
           </CardTitle>
           <CardAction>
             <Badge
               variant="outline"
-              className={`gap-1 ${
-                attendanceRate >= 90
+              className={`gap-1 ${stats.attendanceRate >= 90
                   ? "text-green-600"
-                  : attendanceRate >= 75
-                  ? "text-yellow-600"
-                  : "text-red-600"
-              }`}
+                  : stats.attendanceRate >= 75
+                    ? "text-yellow-600"
+                    : "text-red-600"
+                }`}
             >
               <IconPercentage className="size-4" />
-              {attendanceRate >= 90
+              {stats.attendanceRate >= 90
                 ? "Excellent"
-                : attendanceRate >= 75
-                ? "Average"
-                : "Low"}
+                : stats.attendanceRate >= 75
+                  ? "Average"
+                  : "Low"}
             </Badge>
           </CardAction>
         </CardHeader>
@@ -144,6 +160,7 @@ export function SectionCards({
           </div>
         </CardFooter>
       </Card>
+
     </div>
   )
 }

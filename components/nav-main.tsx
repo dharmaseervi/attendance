@@ -2,7 +2,7 @@
 
 import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -10,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 export function NavMain({
   items,
@@ -43,13 +45,15 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
+          {items.map((item,index) => (
+                <Link key={index} href={item.url}>
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
+                </Link>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>
